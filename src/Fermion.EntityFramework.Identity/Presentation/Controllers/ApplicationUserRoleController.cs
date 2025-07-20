@@ -9,7 +9,7 @@ namespace Fermion.EntityFramework.Identity.Presentation.Controllers;
 [ApiController]
 [Route("api/user-roles")]
 public class ApplicationUserRoleController(
-    IApplicationUserRoleAppService userRoleAppService) 
+    IApplicationUserRoleAppService userRoleAppService)
     : ControllerBase
 {
     [HttpGet("roles/{userId:guid}")]
@@ -21,7 +21,7 @@ public class ApplicationUserRoleController(
         var result = await userRoleAppService.GetRolesByUserIdAsync(userId, cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpGet("users/{roleId:guid}")]
     [ProducesResponseType(typeof(List<ApplicationUserResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -31,7 +31,7 @@ public class ApplicationUserRoleController(
         var result = await userRoleAppService.GetUsersByRoleIdAsync(roleId, cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpPost("assign/{roleId:guid}/to/{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -44,7 +44,7 @@ public class ApplicationUserRoleController(
         await userRoleAppService.AssignRoleToUserAsync(userId, roleId, cancellationToken);
         return NoContent();
     }
-    
+
     [HttpDelete("remove/{roleId:guid}/from/{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -57,7 +57,7 @@ public class ApplicationUserRoleController(
         await userRoleAppService.RemoveRoleFromUserAsync(userId, roleId, cancellationToken);
         return NoContent();
     }
-    
+
     [HttpDelete("clear/{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

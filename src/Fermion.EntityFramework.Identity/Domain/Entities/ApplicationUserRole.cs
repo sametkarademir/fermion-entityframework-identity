@@ -12,16 +12,16 @@ public class ApplicationUserRole : IdentityUserRole<Guid>, IFullAuditedObject, I
     public bool IsDeleted { get; set; }
     public DateTime? DeletionTime { get; set; }
     public Guid? DeleterId { get; set; }
-    
+
     public ApplicationUser? User { get; set; }
     public ApplicationRole? Role { get; set; }
 
     public ApplicationUserRole()
     {
-        
+
     }
 
-    public ApplicationUserRole(Guid userId, Guid roleId) 
+    public ApplicationUserRole(Guid userId, Guid roleId)
     {
         UserId = userId;
         RoleId = roleId;

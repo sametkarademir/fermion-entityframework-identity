@@ -3,10 +3,10 @@ namespace Fermion.EntityFramework.Identity.Domain.Options;
 public class IdentitySeedOptions
 {
     public bool Enabled { get; set; } = true;
-    
+
     public DefaultUserOptions DefaultAdminUser { get; set; } = new();
     public List<string> DefaultRoles { get; set; } = new() { "Admin", "User" };
-    
+
     public OpenIddictOptions OpenIddictClient { get; set; } = new();
 }
 

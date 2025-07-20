@@ -19,7 +19,7 @@ public class AccountAppService(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
     IApplicationUserSessionRepository userSessionRepository,
-    IHttpContextAccessor httpContextAccessor) 
+    IHttpContextAccessor httpContextAccessor)
     : IAccountAppService
 {
     public async Task<ClaimsPrincipal> TokenAsync(CancellationToken cancellationToken = default)
@@ -34,12 +34,12 @@ public class AccountAppService(
         {
             return await LoginAsync(cancellationToken);
         }
-        
+
         if (request.IsRefreshTokenGrantType())
         {
             return await RefreshTokenAsync(cancellationToken);
         }
-        
+
         throw new AppAuthenticationException("The password or refresh token grant type is not supported.");
     }
 
@@ -55,7 +55,7 @@ public class AccountAppService(
         {
             throw new AppAuthenticationException("The password grant type is not supported.");
         }
-        
+
         var matchedUser = await userManager.FindByNameAsync(request.Username!);
         if (matchedUser is null)
         {
@@ -66,32 +66,32 @@ public class AccountAppService(
         {
             throw new AppAuthenticationException("Email not confirmed.");
         }
-        
+
         if (matchedUser.LockoutEnd.HasValue && matchedUser.LockoutEnd.Value > DateTimeOffset.UtcNow)
         {
             throw new AppAuthenticationException("Account is locked out.");
         }
-        
+
         var result = await signInManager.CheckPasswordSignInAsync(matchedUser, request.Password!, false);
         if (result.IsLockedOut)
         {
             throw new AppAuthenticationException("Account is locked out.");
         }
-        
+
         if (!result.Succeeded)
         {
             await userManager.AccessFailedAsync(matchedUser);
             throw new AppAuthenticationException("Invalid credentials.");
         }
-        
+
         await userManager.ResetAccessFailedCountAsync(matchedUser);
         await userManager.SetLockoutEndDateAsync(matchedUser, null);
-        
+
         if (httpContextAccessor.HttpContext == null)
         {
             throw new AppBusinessException("HTTP context is not available.");
         }
-        
+
         var deviceInfo = httpContextAccessor.HttpContext.GetDeviceInfo();
         var newUserSession = new ApplicationUserSession
         {
@@ -109,7 +109,7 @@ public class AccountAppService(
             UserId = matchedUser.Id
         };
         newUserSession = await userSessionRepository.AddAsync(newUserSession, cancellationToken: cancellationToken);
-        
+
         var identity = await CreateIdentityAsync(matchedUser, newUserSession.Id, request.GetScopes());
         var principal = new ClaimsPrincipal(identity);
 
@@ -123,20 +123,20 @@ public class AccountAppService(
         {
             throw new AppAuthenticationException("The OpenIddict request cannot be retrieved.");
         }
-        
+
         if (!request.IsRefreshTokenGrantType())
         {
             throw new AppAuthenticationException("The password grant type is not supported.");
         }
-        
+
         var principal = (await httpContextAccessor.HttpContext!.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal!;
         var matchedUserId = principal.GetClaim(OpenIddictConstants.Claims.Subject);
-        
+
         if (matchedUserId is null)
         {
             throw new AppAuthenticationException("Invalid credentials.");
         }
-        
+
         var matchedUser = await userManager.FindByIdAsync(matchedUserId);
         if (matchedUser is null)
         {
@@ -148,13 +148,13 @@ public class AccountAppService(
         {
             throw new AppAuthenticationException("Invalid session.");
         }
-        
+
         var identity = await CreateIdentityAsync(matchedUser, currentSessionId.Value, request.GetScopes());
         var newPrincipal = new ClaimsPrincipal(identity);
 
         return newPrincipal;
     }
-    
+
     private Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, Guid sessionId, ImmutableArray<string> scopes)
     {
         var identity = new ClaimsIdentity(
@@ -163,7 +163,7 @@ public class AccountAppService(
             roleType: OpenIddictConstants.Claims.Role);
 
         identity.AddClaim(new Claim(OpenIddictConstants.Claims.Subject, user.Id.ToString()));
-       
+
         identity
             .AddClaim(new Claim(ClaimTypes.Name, user.UserName!)
             .SetDestinations(OpenIddictConstants.Destinations.AccessToken));

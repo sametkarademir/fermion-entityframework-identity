@@ -16,7 +16,7 @@ public class UpdateApplicationRoleRequestValidator : AbstractValidator<UpdateApp
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(256);
-        
+
         RuleFor(x => x.Description)
             .MaximumLength(1024);
     }

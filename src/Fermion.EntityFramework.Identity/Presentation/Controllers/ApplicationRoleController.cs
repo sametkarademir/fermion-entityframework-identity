@@ -9,7 +9,7 @@ namespace Fermion.EntityFramework.Identity.Presentation.Controllers;
 [ApiController]
 [Route("api/roles")]
 public class ApplicationRoleController(
-    IApplicationRoleAppService roleAppService) 
+    IApplicationRoleAppService roleAppService)
     : ControllerBase
 {
     [HttpGet("{id:guid}")]

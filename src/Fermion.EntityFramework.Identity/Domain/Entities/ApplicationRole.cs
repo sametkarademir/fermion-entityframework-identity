@@ -21,12 +21,12 @@ public class ApplicationRole : IdentityRole<Guid>, IFullAuditedObject, IEntity
     {
         ConcurrencyStamp = Guid.NewGuid().ToString("N");
     }
-    
+
     public ApplicationRole(string roleName) : base(roleName)
     {
         ConcurrencyStamp = Guid.NewGuid().ToString("N");
     }
-    
+
     public ApplicationRole(string roleName, string? description) : base(roleName)
     {
         ConcurrencyStamp = Guid.NewGuid().ToString("N");

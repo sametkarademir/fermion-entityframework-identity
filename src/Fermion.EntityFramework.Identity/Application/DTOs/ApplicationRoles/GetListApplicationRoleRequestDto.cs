@@ -12,7 +12,7 @@ public class GetListApplicationRoleRequestDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public SortOrderTypes Order { get; set; } = SortOrderTypes.Desc;
     public string? Field { get; set; } = null;
-    
+
     public string? Search { get; set; } = null;
 }
 

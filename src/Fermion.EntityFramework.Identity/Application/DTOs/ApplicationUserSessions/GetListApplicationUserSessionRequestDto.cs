@@ -12,11 +12,11 @@ public class GetListApplicationUserSessionRequestDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public SortOrderTypes Order { get; set; } = SortOrderTypes.Desc;
     public string? Field { get; set; } = null;
-    
+
     public string? Search { get; set; } = null;
-    
+
     public Guid? UserId { get; set; } = null;
-    
+
     public Guid? SnapshotId { get; set; }
     public Guid? CorrelationId { get; set; }
 }
@@ -44,7 +44,7 @@ public class GetListUserSessionRequestValidator : AbstractValidator<GetListAppli
 
         RuleFor(x => x.UserId)
             .Must(x => x == null || x != Guid.Empty);
-        
+
         RuleFor(x => x.SnapshotId)
             .Must(x => x == null || x != Guid.Empty);
 

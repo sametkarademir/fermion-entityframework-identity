@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Fermion.EntityFramework.Identity.DependencyInjection;
 
-public class AppSeedInitializer<TContext>(IServiceProvider serviceProvider) : IHostedService 
+public class AppSeedInitializer<TContext>(IServiceProvider serviceProvider) : IHostedService
     where TContext : DbContext
 {
     public async Task StartAsync(CancellationToken cancellationToken)

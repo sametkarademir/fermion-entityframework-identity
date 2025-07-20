@@ -7,6 +7,6 @@ public class ApplicationUserLogin : IdentityUserLogin<Guid>, ICreationAuditedObj
 {
     public DateTime CreationTime { get; set; }
     public Guid? CreatorId { get; set; }
-    
+
     public ApplicationUser? User { get; set; }
 }

@@ -14,7 +14,7 @@ public class ApplicationUserSession : FullAuditedEntity<Guid>, IEntityCorrelatio
     public string? OsVersion { get; set; }
     public string? BrowserFamily { get; set; }
     public string? BrowserVersion { get; set; }
-    
+
     public bool IsMobile { get; set; }
     public bool IsDesktop { get; set; }
     public bool IsTablet { get; set; }
@@ -27,11 +27,11 @@ public class ApplicationUserSession : FullAuditedEntity<Guid>, IEntityCorrelatio
 
     public ApplicationUserSession()
     {
-        
+
     }
 
-    public ApplicationUserSession(Guid id): base(id)
+    public ApplicationUserSession(Guid id) : base(id)
     {
-        
+
     }
 }

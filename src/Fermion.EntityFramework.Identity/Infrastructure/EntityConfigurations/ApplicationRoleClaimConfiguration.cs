@@ -13,7 +13,7 @@ public class ApplicationRoleClaimConfiguration : IEntityTypeConfiguration<Applic
 
         // Maps to the AspNetRoleClaims table
         builder.ToTable("ApplicationRoleClaims");
-        
+
         // Limit the size of the ClaimType column due to common DB restrictions
         builder.Property(rc => rc.ClaimType).HasMaxLength(256);
         builder.Property(rc => rc.ClaimValue).HasMaxLength(1024);

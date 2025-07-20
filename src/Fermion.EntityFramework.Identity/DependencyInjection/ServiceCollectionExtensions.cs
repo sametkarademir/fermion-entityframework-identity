@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddFermionIdentityServices<TContext>(
         this IServiceCollection services,
-        Action<IdentityOptions> configureOptions) 
+        Action<IdentityOptions> configureOptions)
         where TContext : DbContext
     {
         var options = new IdentityOptions();
@@ -44,14 +44,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IApplicationUserRoleRepository, ApplicationUserRoleRepository<TContext>>();
         services.AddScoped<IApplicationUserSessionRepository, ApplicationUserSessionRepository<TContext>>();
         services.AddScoped<IApplicationUserTokenRepository, ApplicationUserTokenRepository<TContext>>();
-        
+
         services.AddScoped<IAccountAppService, AccountAppService>();
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IApplicationRoleAppService, ApplicationRoleAppService>();
         services.AddScoped<IApplicationUserAppService, ApplicationUserAppService>();
         services.AddScoped<IApplicationUserRoleAppService, ApplicationUserRoleAppService>();
         services.AddScoped<IApplicationUserSessionAppService, ApplicationUserSessionAppService>();
-        
+
         services.AddIdentityCore<ApplicationUser>(opt =>
             {
                 opt.Password.RequiredLength = 8;
@@ -60,11 +60,11 @@ public static class ServiceCollectionExtensions
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = true;
                 opt.SignIn.RequireConfirmedEmail = false;
-                
+
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 opt.Lockout.MaxFailedAccessAttempts = 5;
                 opt.Lockout.AllowedForNewUsers = true;
-                
+
                 opt.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
                 opt.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
                 opt.ClaimsIdentity.EmailClaimType = ClaimTypes.Email;
@@ -76,7 +76,7 @@ public static class ServiceCollectionExtensions
             .AddSignInManager<SignInManager<ApplicationUser>>()
             .AddUserManager<UserManager<ApplicationUser>>()
             .AddDefaultTokenProviders();
-        
+
         services.AddOpenIddict()
             .AddCore(opt =>
             {
@@ -86,7 +86,7 @@ public static class ServiceCollectionExtensions
             {
                 opt.SetTokenEndpointUris("/connect/token");
                 opt.AllowPasswordFlow().AllowRefreshTokenFlow();
- 
+
                 opt.RegisterScopes("api", "offline_access");
                 opt.RegisterScopes(
                     OpenIddictConstants.Scopes.OpenId,
@@ -94,10 +94,10 @@ public static class ServiceCollectionExtensions
                     OpenIddictConstants.Scopes.Profile,
                     OpenIddictConstants.Scopes.OfflineAccess
                 );
-                
+
                 opt.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
                 opt.UseAspNetCore().EnableTokenEndpointPassthrough();
-        
+
                 opt.SetRefreshTokenLifetime(TimeSpan.FromDays(1));
                 opt.SetAccessTokenLifetime(TimeSpan.FromMinutes(60));
             })
@@ -107,7 +107,7 @@ public static class ServiceCollectionExtensions
                 opt.UseAspNetCore();
                 opt.UseSystemNetHttp();
             });
-        
+
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
@@ -122,7 +122,7 @@ public static class ServiceCollectionExtensions
                     manager.ApplicationParts.Add(new AssemblyPart(typeof(ConnectController).Assembly));
                 });
         }
-        
+
         if (options.RoleController.Enabled)
         {
             services.AddControllers()
@@ -130,7 +130,7 @@ public static class ServiceCollectionExtensions
                 {
                     manager.ApplicationParts.Add(new AssemblyPart(typeof(ApplicationRoleController).Assembly));
                 });
-            
+
             services.PostConfigure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.Conventions.Add(new ControllerAuthorizationConvention(
@@ -152,7 +152,7 @@ public static class ServiceCollectionExtensions
                 mvcOptions.Conventions.Add(new ControllerRemovalConvention(typeof(ApplicationRoleController)));
             });
         }
-        
+
         if (options.UserController.Enabled)
         {
             services.AddControllers()
@@ -160,7 +160,7 @@ public static class ServiceCollectionExtensions
                 {
                     manager.ApplicationParts.Add(new AssemblyPart(typeof(ApplicationUserController).Assembly));
                 });
-            
+
             services.PostConfigure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.Conventions.Add(new ControllerAuthorizationConvention(
@@ -182,7 +182,7 @@ public static class ServiceCollectionExtensions
                 mvcOptions.Conventions.Add(new ControllerRemovalConvention(typeof(ApplicationUserController)));
             });
         }
-        
+
         if (options.UserRoleController.Enabled)
         {
             services.AddControllers()
@@ -190,7 +190,7 @@ public static class ServiceCollectionExtensions
                 {
                     manager.ApplicationParts.Add(new AssemblyPart(typeof(ApplicationUserRoleController).Assembly));
                 });
-            
+
             services.PostConfigure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.Conventions.Add(new ControllerAuthorizationConvention(
@@ -212,7 +212,7 @@ public static class ServiceCollectionExtensions
                 mvcOptions.Conventions.Add(new ControllerRemovalConvention(typeof(ApplicationUserRoleController)));
             });
         }
-        
+
         if (options.UserSessionController.Enabled)
         {
             services.AddControllers()
@@ -220,7 +220,7 @@ public static class ServiceCollectionExtensions
                 {
                     manager.ApplicationParts.Add(new AssemblyPart(typeof(ApplicationUserSessionController).Assembly));
                 });
-            
+
             services.PostConfigure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.Conventions.Add(new ControllerAuthorizationConvention(
@@ -242,22 +242,22 @@ public static class ServiceCollectionExtensions
                 mvcOptions.Conventions.Add(new ControllerRemovalConvention(typeof(ApplicationUserSessionController)));
             });
         }
-        
+
         return services;
     }
-    
+
     public static IServiceCollection AddFermionIdentitySeedService<TContext>(
-        this IServiceCollection services, 
-        Action<IdentitySeedOptions> configureOptions) 
+        this IServiceCollection services,
+        Action<IdentitySeedOptions> configureOptions)
         where TContext : DbContext
     {
         var options = new IdentitySeedOptions();
         configureOptions.Invoke(options);
         services.Configure<IdentitySeedOptions>(configureOptions.Invoke);
-        
+
         services.AddScoped<IIdentitySeedService<TContext>, IdentitySeedService<TContext>>();
         services.AddHostedService<AppSeedInitializer<TContext>>();
-        
+
         return services;
     }
 }

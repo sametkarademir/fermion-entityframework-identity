@@ -13,7 +13,7 @@ public class ApplicationUserClaimConfiguration : IEntityTypeConfiguration<Applic
 
         // Maps to the AspNetUserClaims table
         builder.ToTable("ApplicationUserClaims");
-        
+
         // Limit the size of the ClaimType column due to common DB restrictions
         builder.Property(uc => uc.ClaimType).HasMaxLength(256);
         builder.Property(uc => uc.ClaimValue).HasMaxLength(1024);

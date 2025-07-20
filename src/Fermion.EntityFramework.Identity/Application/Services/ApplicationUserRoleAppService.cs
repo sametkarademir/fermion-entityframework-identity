@@ -22,13 +22,13 @@ public class ApplicationUserRoleAppService(
         {
             throw new AppUserFriendlyException("The user already has this role assigned.");
         }
-         
+
         var newUserRole = new ApplicationUserRole
         {
             UserId = userId,
             RoleId = roleId
         };
-        
+
         await applicationUserRoleRepository.AddAsync(newUserRole, cancellationToken: cancellationToken);
         await applicationUserRoleRepository.SaveChangesAsync(cancellationToken);
     }
@@ -40,14 +40,14 @@ public class ApplicationUserRoleAppService(
         {
             throw new AppUserFriendlyException("The user does not have this role assigned.");
         }
-        
+
         var userRole = await applicationUserRoleRepository.GetAsync(
-            item => 
+            item =>
                 item.UserId == userId &&
-                item.RoleId == roleId, 
+                item.RoleId == roleId,
             cancellationToken: cancellationToken
         );
-        
+
         await applicationUserRoleRepository.DeleteAsync(userRole, cancellationToken: cancellationToken);
         await applicationUserRoleRepository.SaveChangesAsync(cancellationToken);
     }
@@ -92,13 +92,13 @@ public class ApplicationUserRoleAppService(
 
         return mapper.Map<List<ApplicationUserResponseDto>>(matchedUserRoles.Select(item => item.User).ToList());
     }
-    
+
     private async Task<bool> ExistingUserRoleCheckAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
     {
         return await applicationUserRoleRepository.AnyAsync(
-            item => 
+            item =>
                 item.UserId == userId &&
-                item.RoleId == roleId, 
+                item.RoleId == roleId,
             enableTracking: false,
             cancellationToken: cancellationToken
         );

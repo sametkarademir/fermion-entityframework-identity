@@ -9,7 +9,7 @@ namespace Fermion.EntityFramework.Identity.Presentation.Controllers;
 [ApiController]
 [Route("api/user-sessions")]
 public class ApplicationUserSessionController(
-    IApplicationUserSessionAppService userSessionAppService) 
+    IApplicationUserSessionAppService userSessionAppService)
     : ControllerBase
 {
     [HttpGet("{id}")]

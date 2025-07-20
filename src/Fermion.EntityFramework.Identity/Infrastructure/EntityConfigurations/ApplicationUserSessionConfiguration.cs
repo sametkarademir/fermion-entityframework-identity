@@ -28,7 +28,7 @@ public class ApplicationUserSessionConfiguration : IEntityTypeConfiguration<Appl
         builder.Property(item => item.IsMobile).IsRequired();
         builder.Property(item => item.IsDesktop).IsRequired();
         builder.Property(item => item.IsTablet).IsRequired();
-        
+
         builder.HasOne(item => item.User)
             .WithMany()
             .HasForeignKey(item => item.UserId)

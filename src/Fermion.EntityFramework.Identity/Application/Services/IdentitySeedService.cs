@@ -46,7 +46,7 @@ public class IdentitySeedService<TContext> : IIdentitySeedService<TContext>
         try
         {
             _logger.LogInformation("Starting identity seed process");
-            
+
             await CreateDefaultRolesAsync(cancellationToken);
             await CreateDefaultAdminUserAsync(cancellationToken);
             await CreateOpenIddictClientAsync(cancellationToken);
@@ -69,14 +69,14 @@ public class IdentitySeedService<TContext> : IIdentitySeedService<TContext>
             {
                 var role = new ApplicationRole { Name = roleName };
                 var result = await _roleManager.CreateAsync(role);
-                
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Created role: {RoleName}", roleName);
                 }
                 else
                 {
-                    _logger.LogError("Failed to create role: {RoleName}. Errors: {Errors}", 
+                    _logger.LogError("Failed to create role: {RoleName}. Errors: {Errors}",
                         roleName, string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
             }
@@ -90,7 +90,7 @@ public class IdentitySeedService<TContext> : IIdentitySeedService<TContext>
     private async Task CreateDefaultAdminUserAsync(CancellationToken cancellationToken)
     {
         var adminUser = _options.Value.DefaultAdminUser;
-        
+
         var existingUser = await _userManager.FindByNameAsync(adminUser.UserName);
         if (existingUser != null)
         {
@@ -107,7 +107,7 @@ public class IdentitySeedService<TContext> : IIdentitySeedService<TContext>
         };
 
         var result = await _userManager.CreateAsync(user, adminUser.Password);
-        
+
         if (result.Succeeded)
         {
             _logger.LogInformation("Created admin user: {UserName}", adminUser.UserName);
@@ -120,18 +120,18 @@ public class IdentitySeedService<TContext> : IIdentitySeedService<TContext>
                 }
                 else
                 {
-                    _logger.LogWarning("Role {RoleName} does not exist, skipping assignment to admin user {UserName}", 
+                    _logger.LogWarning("Role {RoleName} does not exist, skipping assignment to admin user {UserName}",
                         roleName, adminUser.UserName);
                 }
             }
         }
         else
         {
-            _logger.LogError("Failed to create admin user: {UserName}. Errors: {Errors}", 
+            _logger.LogError("Failed to create admin user: {UserName}. Errors: {Errors}",
                 adminUser.UserName, string.Join(", ", result.Errors.Select(e => e.Description)));
         }
     }
-    
+
     private async Task CreateOpenIddictClientAsync(CancellationToken cancellationToken)
     {
         if (await _manager.FindByClientIdAsync(_options.Value.OpenIddictClient.ClientId, cancellationToken) != null)
@@ -156,4 +156,4 @@ public class IdentitySeedService<TContext> : IIdentitySeedService<TContext>
             }
         }, cancellationToken: cancellationToken);
     }
-} 
+}

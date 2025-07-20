@@ -8,14 +8,14 @@ public class CreateApplicationUserRequestDto
     public string UserName { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string? PhoneNumber { get; set; }
-    
+
     public string Password { get; set; } = null!;
     public string ConfirmPassword { get; set; } = null!;
-    
+
     public bool EmailConfirmed { get; set; }
     public bool PhoneNumberConfirmed { get; set; }
     public bool TwoFactorEnabled { get; set; }
-    
+
     public DateTimeOffset? LockoutEnd { get; set; }
     public bool LockoutEnabled { get; set; } = true;
 
@@ -34,12 +34,12 @@ public class CreateApplicationUserRequestValidator : AbstractValidator<CreateApp
             .NotEmpty()
             .EmailAddress()
             .MaximumLength(256);
-        
+
         RuleFor(x => x.PhoneNumber)
             .Matches(@"^\+?[1-9]\d{1,14}$")
             .When(x => !string.IsNullOrEmpty(x.PhoneNumber))
             .WithMessage("Phone number must be in a valid international format if provided.");
-        
+
         RuleFor(x => x.Password)
             .NotEmpty()
             .MinimumLength(8)
@@ -53,7 +53,7 @@ public class CreateApplicationUserRequestValidator : AbstractValidator<CreateApp
             .Must(PasswordValidationExtensions.NotContainRepeatingCharacters).WithMessage("Password must not contain the same character 3 times in a row.")
             .Must((model, password) => !PasswordValidationExtensions.ContainUsername(password, model.UserName)).WithMessage("Password must not contain your username.")
             .Must((model, password) => !PasswordValidationExtensions.ContainEmailParts(password, model.Email)).WithMessage("Password must not contain parts of your email address.");
-        
+
         RuleFor(x => x.ConfirmPassword)
             .NotEmpty()
             .Equal(x => x.Password).WithMessage("Passwords do not match.");

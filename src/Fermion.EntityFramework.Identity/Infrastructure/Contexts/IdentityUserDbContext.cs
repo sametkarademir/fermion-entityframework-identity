@@ -5,23 +5,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fermion.EntityFramework.Identity.Infrastructure.Contexts;
 
-public abstract class IdentityUserDbContext 
+public abstract class IdentityUserDbContext
     : IdentityDbContext<
-        ApplicationUser, 
-        ApplicationRole, 
-        Guid, 
-        ApplicationUserClaim, 
-        ApplicationUserRole, 
-        ApplicationUserLogin, 
-        ApplicationRoleClaim, 
+        ApplicationUser,
+        ApplicationRole,
+        Guid,
+        ApplicationUserClaim,
+        ApplicationUserRole,
+        ApplicationUserLogin,
+        ApplicationRoleClaim,
         ApplicationUserToken>
 {
     public DbSet<ApplicationUserSession> UserSessions { get; set; }
- 
+
     public IdentityUserDbContext(DbContextOptions options) : base(options)
     {
     }
-    
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

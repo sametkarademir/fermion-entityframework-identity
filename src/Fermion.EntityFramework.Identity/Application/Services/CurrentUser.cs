@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace Fermion.EntityFramework.Identity.Application.Services;
 
-public class CurrentUser: ICurrentUser
+public class CurrentUser : ICurrentUser
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-   
+
     public CurrentUser(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;

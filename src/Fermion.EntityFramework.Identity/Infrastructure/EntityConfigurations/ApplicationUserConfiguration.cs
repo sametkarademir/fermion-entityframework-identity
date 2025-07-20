@@ -10,15 +10,15 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.ApplyGlobalEntityConfigurations();
-        
+
         // Primary key
         builder.HasKey(u => u.Id);
 
         // Indexes for "normalized" username and email, to allow efficient lookups
         builder.HasIndex(u => u.NormalizedUserName).HasDatabaseName("UserNameIndex").IsUnique(false);
         builder.HasIndex(u => u.NormalizedEmail).HasDatabaseName("EmailIndex").IsUnique(false);
-        builder.HasIndex(u => new {u.NormalizedUserName, u.DeletionTime}).IsUnique();
-        builder.HasIndex(u => new {u.NormalizedEmail, u.DeletionTime}).IsUnique();
+        builder.HasIndex(u => new { u.NormalizedUserName, u.DeletionTime }).IsUnique();
+        builder.HasIndex(u => new { u.NormalizedEmail, u.DeletionTime }).IsUnique();
 
         // Maps to the AspNetUsers table
         builder.ToTable("ApplicationUsers");

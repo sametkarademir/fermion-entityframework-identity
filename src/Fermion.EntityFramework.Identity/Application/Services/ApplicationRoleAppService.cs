@@ -47,11 +47,11 @@ public class ApplicationRoleAppService(IApplicationRoleRepository applicationRol
     public async Task<ApplicationRoleResponseDto> CreateAsync(CreateApplicationRoleRequestDto request, CancellationToken cancellationToken = default)
     {
         var existingRole = await applicationRoleRepository.AnyAsync(
-            item => 
+            item =>
                 item.NormalizedName == request.Name.ToUpperInvariant(),
             enableTracking: false,
             cancellationToken: cancellationToken);
-        
+
         if (existingRole)
         {
             throw new AppUserFriendlyException($"Role with name '{request.Name}' already exists.");
@@ -67,14 +67,14 @@ public class ApplicationRoleAppService(IApplicationRoleRepository applicationRol
 
     public async Task<ApplicationRoleResponseDto> UpdateAsync(Guid id, UpdateApplicationRoleRequestDto request, CancellationToken cancellationToken = default)
     {
-        var matchedRole =  await applicationRoleRepository.GetAsync(item => item.Id == id, cancellationToken: cancellationToken);
-        
+        var matchedRole = await applicationRoleRepository.GetAsync(item => item.Id == id, cancellationToken: cancellationToken);
+
         var existingRole = await applicationRoleRepository.AnyAsync(
-            item => 
+            item =>
                 item.NormalizedName == request.Name.ToUpperInvariant(),
             enableTracking: false,
             cancellationToken: cancellationToken);
-        
+
         if (matchedRole.Name != request.Name && existingRole)
         {
             throw new AppUserFriendlyException($"Role with name '{request.Name}' already exists.");
@@ -96,7 +96,7 @@ public class ApplicationRoleAppService(IApplicationRoleRepository applicationRol
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var matchedRole =  await applicationRoleRepository.GetAsync(item => item.Id == id, cancellationToken: cancellationToken);
+        var matchedRole = await applicationRoleRepository.GetAsync(item => item.Id == id, cancellationToken: cancellationToken);
         await applicationRoleRepository.DeleteAsync(matchedRole, cancellationToken: cancellationToken);
         await applicationRoleRepository.SaveChangesAsync(cancellationToken: cancellationToken);
     }

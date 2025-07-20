@@ -39,7 +39,7 @@ public class ApplicationUserAppService(
         queryable = queryable
             .Include(item => item.UserRoles)
             .ThenInclude(item => item.Role!);
-        queryable = queryable.WhereIf(!string.IsNullOrWhiteSpace(request.Search), item => 
+        queryable = queryable.WhereIf(!string.IsNullOrWhiteSpace(request.Search), item =>
             item.NormalizedEmail!.Contains(request.Search!.ToUpperInvariant()) ||
             item.NormalizedUserName!.Contains(request.Search!.ToUpperInvariant())
         );
@@ -47,7 +47,7 @@ public class ApplicationUserAppService(
         queryable = queryable.AsNoTracking();
         queryable = queryable.ApplySort(request.Field, request.Order, cancellationToken);
         var result = await queryable.ToPageableAsync(request.Page, request.PerPage, cancellationToken: cancellationToken);
-        var mappedUsers= mapper.Map<List<ApplicationUserResponseDto>>(result.Data);
+        var mappedUsers = mapper.Map<List<ApplicationUserResponseDto>>(result.Data);
 
         return new PageableResponseDto<ApplicationUserResponseDto>(mappedUsers, result.Meta);
     }
@@ -72,13 +72,13 @@ public class ApplicationUserAppService(
                 LockoutEnd = request.LockoutEnd,
                 LockoutEnabled = request.LockoutEnabled
             };
-        
+
             var result = await userManager.CreateAsync(newUser, request.Password);
             if (!result.Succeeded)
             {
                 throw new AppUserFriendlyException(string.Join(", ", result.Errors.Select(e => e.Description)));
             }
-        
+
             if (request.Roles.Count > 0)
             {
                 var roleResult = await userManager.AddToRolesAsync(newUser, request.Roles);
@@ -87,7 +87,7 @@ public class ApplicationUserAppService(
                     throw new AppUserFriendlyException(string.Join(", ", roleResult.Errors.Select(e => e.Description)));
                 }
             }
-            
+
             await transaction.CommitAsync(cancellationToken);
 
             return mapper.Map<ApplicationUserResponseDto>(newUser);
@@ -146,7 +146,7 @@ public class ApplicationUserAppService(
                     throw new AppUserFriendlyException(string.Join(", ", removeRolesResult.Errors.Select(e => e.Description)));
                 }
             }
-            
+
             await transaction.CommitAsync(cancellationToken);
 
             return mapper.Map<ApplicationUserResponseDto>(matchedUser);
@@ -208,27 +208,27 @@ public class ApplicationUserAppService(
         await applicationUserRepository.DeleteAsync(matchedUser, cancellationToken: cancellationToken);
         await applicationUserRepository.SaveChangesAsync(cancellationToken);
     }
-    
+
     private async Task IsUserNameExistsAsync(string userName, CancellationToken cancellationToken = default)
     {
         var existingUserName = await applicationUserRepository.AnyAsync(
             item => item.NormalizedUserName == userName.ToUpperInvariant(),
             enableTracking: false,
             cancellationToken: cancellationToken);
-        
+
         if (existingUserName)
         {
             throw new AppUserFriendlyException($"User with UserName '{userName}' already exists.");
         }
     }
-    
+
     private async Task IsEmailExistsAsync(string email, CancellationToken cancellationToken = default)
     {
         var existingEmail = await applicationUserRepository.AnyAsync(
             item => item.NormalizedEmail == email.ToUpperInvariant(),
             enableTracking: false,
             cancellationToken: cancellationToken);
-        
+
         if (existingEmail)
         {
             throw new AppUserFriendlyException($"User with Email '{email}' already exists.");

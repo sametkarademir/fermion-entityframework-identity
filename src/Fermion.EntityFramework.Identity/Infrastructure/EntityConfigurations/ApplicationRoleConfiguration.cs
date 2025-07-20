@@ -10,11 +10,11 @@ public class ApplicationRoleConfiguration : IEntityTypeConfiguration<Application
     public void Configure(EntityTypeBuilder<ApplicationRole> builder)
     {
         builder.ApplyGlobalEntityConfigurations();
-        
+
         // Primary key
         builder.HasKey(r => r.Id);
         builder.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique(false);
-        builder.HasIndex(item => new { item.NormalizedName, item.DeletionTime }).IsUnique(); 
+        builder.HasIndex(item => new { item.NormalizedName, item.DeletionTime }).IsUnique();
 
         // Maps to the AspNetRoles table
         builder.ToTable("ApplicationRoles");

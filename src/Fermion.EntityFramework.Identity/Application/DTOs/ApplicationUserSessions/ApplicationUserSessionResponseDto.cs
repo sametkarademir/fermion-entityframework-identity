@@ -14,7 +14,7 @@ public class ApplicationUserSessionResponseDto : FullAuditedEntityDto<Guid>
     public string? OsVersion { get; set; }
     public string? BrowserFamily { get; set; }
     public string? BrowserVersion { get; set; }
-    
+
     public bool IsMobile { get; set; }
     public bool IsDesktop { get; set; }
     public bool IsTablet { get; set; }

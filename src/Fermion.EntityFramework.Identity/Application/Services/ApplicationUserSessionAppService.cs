@@ -15,12 +15,12 @@ public class ApplicationUserSessionAppService(IApplicationUserSessionRepository 
     {
         var matchedUserSession = await applicationUserSessionRepository.GetAsync(
             id: id,
-            include: item => 
+            include: item =>
                 item.Include(x => x.User)!,
             enableTracking: false,
             cancellationToken: cancellationToken
         );
-        
+
         return mapper.Map<ApplicationUserSessionResponseDto>(matchedUserSession);
     }
 
@@ -29,7 +29,7 @@ public class ApplicationUserSessionAppService(IApplicationUserSessionRepository 
         var queryable = applicationUserSessionRepository.GetQueryable();
         queryable = queryable.WhereIf(
             !string.IsNullOrWhiteSpace(request.Search),
-            item => 
+            item =>
                 item.ClientIp.Contains(request.Search!) ||
                 (item.DeviceFamily != null && item.DeviceFamily.Contains(request.Search!)) ||
                 (item.DeviceModel != null && item.DeviceModel.Contains(request.Search!)) ||
@@ -39,12 +39,12 @@ public class ApplicationUserSessionAppService(IApplicationUserSessionRepository 
                 (item.BrowserVersion != null && item.BrowserVersion.Contains(request.Search!))
         );
         queryable = queryable.WhereIf(request.UserId.HasValue, item => item.UserId == request.UserId);
-        
+
         queryable = queryable.AsNoTracking();
         queryable = queryable.ApplySort(request.Field, request.Order, cancellationToken);
         var result = await queryable.ToPageableAsync(request.Page, request.PerPage, cancellationToken: cancellationToken);
         var mappedUserSessions = mapper.Map<List<ApplicationUserSessionResponseDto>>(result.Data);
-        
+
         return new PageableResponseDto<ApplicationUserSessionResponseDto>(mappedUserSessions, result.Meta);
     }
 }

@@ -9,7 +9,7 @@ namespace Fermion.EntityFramework.Identity.Presentation.Controllers;
 [ApiController]
 [Route("api/users")]
 public class ApplicationUserController(
-    IApplicationUserAppService userAppService) 
+    IApplicationUserAppService userAppService)
     : ControllerBase
 {
     [HttpGet("{id:guid}")]
@@ -50,7 +50,7 @@ public class ApplicationUserController(
         var result = await userAppService.UpdateAsync(id, request, cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpPost("change-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,7 +60,7 @@ public class ApplicationUserController(
         await userAppService.ChangePasswordAsync(request, cancellationToken);
         return NoContent();
     }
-    
+
     [HttpPost("{id:guid}/lock")]
     [ProducesResponseType(typeof(ApplicationUserResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,7 +70,7 @@ public class ApplicationUserController(
         var result = await userAppService.LockAsync(id, isPermanent, cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpPost("{id:guid}/unlock")]
     [ProducesResponseType(typeof(ApplicationUserResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -80,7 +80,7 @@ public class ApplicationUserController(
         var result = await userAppService.UnlockAsync(id, cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

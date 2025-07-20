@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fermion.EntityFramework.Identity.Infrastructure.Repositories;
 
-public class ApplicationRoleClaimRepository<TContext> : EfRepositoryBase<ApplicationRoleClaim, TContext>, IApplicationRoleClaimRepository 
+public class ApplicationRoleClaimRepository<TContext> : EfRepositoryBase<ApplicationRoleClaim, TContext>, IApplicationRoleClaimRepository
     where TContext : DbContext
 {
     public ApplicationRoleClaimRepository(TContext context) : base(context)
