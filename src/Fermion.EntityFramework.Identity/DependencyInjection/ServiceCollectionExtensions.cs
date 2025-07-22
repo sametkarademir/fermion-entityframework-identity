@@ -92,7 +92,8 @@ public static class ServiceCollectionExtensions
                     OpenIddictConstants.Scopes.OpenId,
                     OpenIddictConstants.Scopes.Email,
                     OpenIddictConstants.Scopes.Profile,
-                    OpenIddictConstants.Scopes.OfflineAccess
+                    OpenIddictConstants.Scopes.OfflineAccess,
+                    OpenIddictConstants.Scopes.Roles
                 );
 
                 opt.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
