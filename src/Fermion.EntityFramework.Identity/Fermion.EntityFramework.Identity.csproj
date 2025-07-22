@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PackageId>Fermion.EntityFramework.Identity</PackageId>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>1.0.2</Version>
+        <Version>1.0.1</Version>
         <Authors>Samet Karademir</Authors>
         <Description>A Fermion package for integrating Entity Framework Core with Identity.</Description>
         <PackageTags>dotnet;fermion;entityframework;identity</PackageTags>
