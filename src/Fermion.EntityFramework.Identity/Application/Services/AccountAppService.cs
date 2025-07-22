@@ -155,7 +155,7 @@ public class AccountAppService(
         return newPrincipal;
     }
 
-    private Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, Guid sessionId, ImmutableArray<string> scopes)
+    private async Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, Guid sessionId, ImmutableArray<string> scopes)
     {
         var identity = new ClaimsIdentity(
             authenticationType: TokenValidationParameters.DefaultAuthenticationType,
@@ -176,10 +176,20 @@ public class AccountAppService(
         identity
             .AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             .SetDestinations(OpenIddictConstants.Destinations.AccessToken));
+        
+        if (scopes.Contains(OpenIddictConstants.Scopes.Roles))
+        {
+            var userRoles = await userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, role)
+                    .SetDestinations(OpenIddictConstants.Destinations.AccessToken));
+            }
+        }
 
         identity.SetScopes(scopes);
         identity.SetResources("api");
 
-        return Task.FromResult(identity);
+        return identity;
     }
 }
