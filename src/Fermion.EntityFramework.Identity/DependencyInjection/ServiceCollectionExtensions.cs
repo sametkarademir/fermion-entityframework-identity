@@ -14,8 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
+using OpenIddict.Validation;
 using OpenIddict.Validation.AspNetCore;
 using IdentityOptions = Fermion.EntityFramework.Identity.Domain.Options.IdentityOptions;
 
@@ -108,6 +108,12 @@ public static class ServiceCollectionExtensions
                 opt.UseAspNetCore();
                 opt.UseSystemNetHttp();
             });
+        
+        services.Configure<OpenIddictValidationOptions>(opt =>
+        {
+            opt.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
+            opt.TokenValidationParameters.NameClaimType = ClaimTypes.Name;
+        });
 
         services.AddAuthentication(opt =>
         {
